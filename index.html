@@ -1,43 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A Letter for My fuchi dalli</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LipiNepal — Professional Nepali Text Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id="petal-container"></div>
-    
-    <main class="letter-container">
-        <div class="paper">
-            <div class="heart-stamp">❤️</div>
-            <div class="letter-content">
-                <h1 class="cursive"> My Dearest Kabita Dhakal </h1>
-                <p id="typewriter" class="cursive-text"></p>
-                
-                <div id="sig-wrap" class="signature cursive">
-                    <span id="sig-text"></span><br>
-                    <span id="name-text" class="my-name"></span>
-                </div>
-                
-                <div id="ask-section" class="hidden">
-                    <h2 class="question">Will you be my Valentine?</h2>
-                    <div class="btn-group">
-                        <button id="yes-btn">YES! 🌹</button>
-                        <button id="no-btn">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-np">लिपि</span>
+        <span class="logo-en">Nepal</span>
+        <span class="logo-tag">Pro</span>
+      </div>
+      <nav class="header-nav">
+        <span class="nav-hint" id="shortcutHint">
+          <kbd>Ctrl+C</kbd> copy &nbsp;·&nbsp; <kbd>Ctrl+L</kbd> clear
+        </span>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <span class="theme-icon light-icon">☀</span>
+          <span class="theme-icon dark-icon">☽</span>
+        </button>
+      </nav>
+    </div>
+  </header>
 
-    <div id="success-overlay" class="hidden">
-        <h1 class="cursive">I knew you'd say yes! ❤️</h1>
-        <p>I can't wait to spend forever with you.</p>
+  <section class="hero">
+    <p class="hero-sub">Professional Nepali text conversion &amp; translation</p>
+    <h1 class="hero-title">Convert. Translate.<br/><em>Publish.</em></h1>
+  </section>
+
+  <div class="container">
+    <div class="mode-tabs" role="tablist" aria-label="Conversion mode">
+      <button class="tab active" data-mode="translate" role="tab" aria-selected="true">
+        <span class="tab-icon">⇄</span>
+        <span class="tab-label">English → Nepali</span>
+        <span class="tab-sub">Translation</span>
+      </button>
+      <button class="tab" data-mode="roman" role="tab" aria-selected="false">
+        <span class="tab-icon">अ</span>
+        <span class="tab-label">Romanized → Preeti</span>
+        <span class="tab-sub">Phonetic typing</span>
+      </button>
+      <button class="tab" data-mode="unicode" role="tab" aria-selected="false">
+        <span class="tab-icon">U</span>
+        <span class="tab-label">Unicode → Preeti</span>
+        <span class="tab-sub">Font conversion</span>
+      </button>
     </div>
 
-    <script src="script.js"></script>
+    <div class="mode-desc" id="modeDesc">
+      <div class="mode-desc-content" data-mode="translate">
+        Type English text and get instant Nepali translation powered by the MyMemory API.
+      </div>
+      <div class="mode-desc-content hidden" data-mode="roman">
+        Type romanized Nepali (e.g. <em>namaste</em>, <em>kathmandu</em>) and get Preeti-ready output.
+      </div>
+      <div class="mode-desc-content hidden" data-mode="unicode">
+        Paste Unicode Nepali (नेपाली) and convert to legacy Preeti font format for office documents.
+      </div>
+    </div>
+
+    <div class="api-banner" id="apiBanner">
+      <div class="api-banner-inner">
+        <span class="api-status-dot" id="apiStatusDot"></span>
+        <span id="apiStatusText">Using MyMemory free translation API — no key required. Configure Google Translate for higher limits.</span>
+        <button class="api-config-btn" id="apiConfigBtn">Configure API</button>
+      </div>
+    </div>
+
+    <div class="api-panel hidden" id="apiPanel">
+      <div class="api-panel-inner">
+        <label for="apiKeyInput" class="api-label">Google Translate API Key <span class="optional">(optional — upgrades from MyMemory to Google)</span></label>
+        <div class="api-row">
+          <input type="password" id="apiKeyInput" class="api-input" placeholder="AIzaSy..." autocomplete="off" />
+          <button class="btn-secondary" id="saveApiKey">Save</button>
+          <button class="btn-ghost" id="clearApiKey">Clear</button>
+        </div>
+        <p class="api-note">Key stored only in your browser (localStorage). Never sent to our servers.</p>
+      </div>
+    </div>
+
+    <div class="panels">
+      <div class="panel panel-input">
+        <div class="panel-header">
+          <span class="panel-label" id="inputLabel">English Input</span>
+          <div class="panel-actions">
+            <button class="action-btn" id="pasteBtn" title="Paste from clipboard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+              Paste
+            </button>
+            <button class="action-btn" id="clearBtn" title="Clear input (Ctrl+L)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Clear
+            </button>
+          </div>
+        </div>
+        <textarea
+          class="text-area"
+          id="inputText"
+          placeholder="Start typing here…"
+          spellcheck="false"
+          autocorrect="off"
+          autocapitalize="off"
+        ></textarea>
+        <div class="panel-footer">
+          <span class="char-count" id="inputCount">0 characters</span>
+          <span class="word-count" id="inputWords">0 words</span>
+        </div>
+      </div>
+
+      <div class="panels-divider">
+        <div class="divider-arrow" id="dividerArrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+
+      <div class="panel panel-output">
+        <div class="panel-header">
+          <span class="panel-label" id="outputLabel">Nepali Output</span>
+          <div class="panel-actions">
+            <button class="action-btn" id="copyBtn" title="Copy output (Ctrl+C)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span id="copyLabel">Copy</span>
+            </button>
+            <button class="action-btn" id="downloadBtn" title="Download as .txt">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+
+        <div class="loading-overlay hidden" id="loadingOverlay">
+          <div class="loading-spinner"></div>
+          <span>Translating…</span>
+        </div>
+
+        <textarea
+          class="text-area output-area"
+          id="outputText"
+          readonly
+          placeholder="Output will appear here…"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="panel-footer">
+          <span class="char-count" id="outputCount">0 characters</span>
+          <div class="font-preview-row hidden" id="fontPreviewRow">
+            <label class="toggle-label">
+              <input type="checkbox" id="fontPreviewToggle" />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span>Preeti font preview</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast hidden" id="errorToast" role="alert" aria-live="polite">
+      <span class="toast-icon">⚠</span>
+      <span id="toastMessage">Something went wrong.</span>
+      <button class="toast-close" id="toastClose">×</button>
+    </div>
+
+    <div class="toast toast-success hidden" id="successToast" role="status" aria-live="polite">
+      <span class="toast-icon">✓</span>
+      <span id="successMessage">Copied to clipboard!</span>
+    </div>
+
+    <div class="samples-section">
+      <p class="samples-title">Try an example:</p>
+      <div class="samples" id="samplesContainer"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>लिपिNepal Pro — Professional Nepali Text Tools</span>
+      <span class="footer-sep">·</span>
+      <span>Unicode 15.0 compliant · Preeti legacy support</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
